@@ -27,10 +27,24 @@ class PhishingViewModel : ViewModel() {
     var isSafe by mutableStateOf(false)
         private set
 
+    var isNotSafe by mutableStateOf(false)
+        private set
+
     // Fungsi untuk memeriksa URL
     fun checkUrl(url: String) {
         if (url.isBlank()) {
             urlStatus = "URL tidak boleh kosong"
+            isUrlChecked = true
+            isSafe = false
+            isNotSafe = false
+            return
+        }
+
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            urlStatus = "Input form harus berupa tautan website (http/https)"
+            isUrlChecked = true
+            isSafe = false
+            isNotSafe = false
             return
         }
 
@@ -45,21 +59,16 @@ class PhishingViewModel : ViewModel() {
                 val response = RetrofitClient.instance.checkUrl(request)
 
                 isUrlChecked = true
-                isSafe = response.status == "Aman"
+                isSafe = response.status.equals("Aman", ignoreCase = true)
+                isNotSafe = response.status.equals("Tidak Aman", ignoreCase = true)
 
-                urlStatus = if (isSafe) {
-                    "Link 100% AMAN digunakan"
-                } else {
-                    "Link 100% TIDAK AMAN digunakan"
-                }
-
-                val safePercentage = if (isSafe) {
+                val safePercentage = if (response.prediction == 1) {
                     (response.probability.non_phishing * 100).roundToInt()
                 } else {
                     (response.probability.phishing * 100).roundToInt()
                 }
 
-                urlSafePercentage = "Tingkat keyakinan: $safePercentage%"
+                urlStatus = "Link $safePercentage% ${response.status.uppercase()} digunakan"
 
             } catch (e: Exception) {
                 urlStatus = "Error: ${e.message}"
@@ -69,5 +78,14 @@ class PhishingViewModel : ViewModel() {
                 isLoading = false
             }
         }
+    }
+
+    fun reset() {
+        urlStatus = ""
+        urlSafePercentage = ""
+        isLoading = false
+        isUrlChecked = false
+        isSafe = false
+        isNotSafe = false
     }
 }

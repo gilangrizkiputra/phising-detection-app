@@ -16,8 +16,8 @@ if (envFile.exists()) {
 
 // Daftar key yang akan di-inject ke BuildConfig
 val autoEnvKeys = listOf(
-    "API_KEY",
-    "BASE_URL"
+    "BASE_URL",
+    "API_KEY"
     // Tambahin key lain di sini
 )
 
@@ -58,6 +58,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -103,4 +104,7 @@ dependencies {
     implementation ("io.coil-kt:coil-compose:1.4.0")
     implementation ("androidx.compose.ui:ui-tooling:1.0.0-beta01")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
+
+    // Accompanist refresh page
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.30.1")
 }
