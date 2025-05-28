@@ -80,4 +80,5 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
     implementation ("io.coil-kt:coil-compose:1.4.0")
     implementation ("androidx.compose.ui:ui-tooling:1.0.0-beta01")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
 }
