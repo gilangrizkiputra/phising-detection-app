@@ -287,7 +287,7 @@ fun MainScreenContent(
                             .padding(16.dp)
                     ) {
                         Text(
-                            text = "Berita"
+                            text = "Berita & Tips"
                         )
                     }
                 }
