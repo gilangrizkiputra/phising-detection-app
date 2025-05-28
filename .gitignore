@@ -1,15 +1,22 @@
+# Ignore IDE & build files
 *.iml
 .gradle
 /local.properties
+.DS_Store
+
+# IntelliJ IDEA
 /.idea/caches
 /.idea/libraries
 /.idea/modules.xml
 /.idea/workspace.xml
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
-.DS_Store
+
+# Build output
 /build
 /captures
 .externalNativeBuild
 .cxx
-local.properties
+
+# Optional: ignore gradle.properties if contains secret key
+gradle.properties
