@@ -20,3 +20,4 @@
 
 # Optional: ignore gradle.properties if contains secret key
 gradle.properties
+.env

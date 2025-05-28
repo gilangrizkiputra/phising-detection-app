@@ -1,8 +1,25 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
+
+//setup env / load env
+val envProps = Properties()
+val envFile = File(rootDir, ".env")
+if (envFile.exists()) {
+    envProps.load(FileInputStream(envFile))
+}
+
+// Daftar key yang akan di-inject ke BuildConfig
+val autoEnvKeys = listOf(
+    "API_KEY",
+    "BASE_URL"
+    // Tambahin key lain di sini
+)
 
 android {
     namespace = "com.project.phistingdetection"
@@ -16,6 +33,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        autoEnvKeys.forEach { key ->
+            val value = envProps[key] ?: error("Missing `$key` in .env")
+            buildConfigField("String", key, "\"$value\"")
+        }
     }
 
     buildTypes {
