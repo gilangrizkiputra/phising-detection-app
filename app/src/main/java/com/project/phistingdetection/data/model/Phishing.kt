@@ -1,4 +1,4 @@
-package com.project.phistingdetection.model
+package com.project.phistingdetection.data.model
 
 data class PhishingResponse(
     val url: String,

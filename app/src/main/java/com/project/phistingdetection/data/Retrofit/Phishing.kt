@@ -1,7 +1,7 @@
 package com.project.phistingdetection.data.Retrofit
 
-import com.project.phistingdetection.model.PhishingResponse
-import com.project.phistingdetection.model.UrlRequest
+import com.project.phistingdetection.data.model.PhishingResponse
+import com.project.phistingdetection.data.model.UrlRequest
 import retrofit2.http.Body
 import retrofit2.http.POST
 

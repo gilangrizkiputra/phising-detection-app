@@ -12,6 +12,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import com.project.phistingdetection.ui.theme.background
 import com.project.phistingdetection.ui.theme.poppinsFontFamily
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,7 +48,7 @@ fun FormInputItem(
             keyboardType = keyboardType
         ),
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            containerColor = Color.White,
+            containerColor = background,
             focusedBorderColor = Color.Transparent,
             unfocusedBorderColor = Color.Transparent,
 

@@ -1,12 +1,12 @@
 package com.project.phistingdetection.MainScreen
 
-import com.project.phistingdetection.data.Retrofit.RetrofitClient
+import com.project.phistingdetection.data.Retrofit.PhishingRetrofitClient
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.project.phistingdetection.model.UrlRequest
+import com.project.phistingdetection.data.model.UrlRequest
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -30,7 +30,6 @@ class PhishingViewModel : ViewModel() {
     var isNotSafe by mutableStateOf(false)
         private set
 
-    // Fungsi untuk memeriksa URL
     fun checkUrl(url: String) {
         if (url.isBlank()) {
             urlStatus = "URL tidak boleh kosong"
@@ -56,7 +55,7 @@ class PhishingViewModel : ViewModel() {
 
                 val request = UrlRequest(url = url)
 
-                val response = RetrofitClient.instance.checkUrl(request)
+                val response = PhishingRetrofitClient.instance.checkUrl(request)
 
                 isUrlChecked = true
                 isSafe = response.status.equals("Aman", ignoreCase = true)

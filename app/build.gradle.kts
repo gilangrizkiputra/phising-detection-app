@@ -17,8 +17,8 @@ if (envFile.exists()) {
 // Daftar key yang akan di-inject ke BuildConfig
 val autoEnvKeys = listOf(
     "BASE_URL",
-    "API_KEY"
-    // Tambahin key lain di sini
+    "API_KEY",
+    "NEWS_API_KEY"
 )
 
 android {
