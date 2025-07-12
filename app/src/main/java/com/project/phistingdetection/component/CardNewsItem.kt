@@ -1,6 +1,7 @@
 package com.project.phistingdetection.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,6 +32,7 @@ import com.project.phistingdetection.ui.theme.blue
 fun cardNewsItem(
     image: String,
     title: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Surface(
@@ -39,6 +41,7 @@ fun cardNewsItem(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(20.dp))
+            .clickable { onClick() }
     ) {
         Column(
             horizontalAlignment = Alignment.Start,

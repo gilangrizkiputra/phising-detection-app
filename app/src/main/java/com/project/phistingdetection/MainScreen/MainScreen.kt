@@ -66,7 +66,9 @@ import com.project.phistingdetection.ui.theme.background
 import com.project.phistingdetection.ui.theme.blue
 import com.project.phistingdetection.ui.theme.darkGray
 import com.project.phistingdetection.ui.theme.gray
+import com.project.phistingdetection.ui.theme.green
 import com.project.phistingdetection.ui.theme.poppinsFontFamily
+import com.project.phistingdetection.ui.theme.red
 import com.project.phistingdetection.ui.theme.turquoiseGreen
 import com.project.phistingdetection.ui.theme.white
 import kotlinx.coroutines.CoroutineScope
@@ -79,6 +81,7 @@ fun MainScreen(
     viewModelUrl: PhishingViewModel = viewModel(),
     viewModelNews : NewsViewModel = viewModel(),
     initialUrl: String = "",
+    onNewsClick: (NewsItem) -> Unit
 ) {
     var inputLinkUrl by remember {
         mutableStateOf(initialUrl)
@@ -100,6 +103,7 @@ fun MainScreen(
         },
         onCheckNews = { viewModelNews.fetchNews() },
         newsList = viewModelNews.newsList,
+        onNewsClick = onNewsClick,
         isLoadingNews = viewModelNews.isLoading,
     )
 }
@@ -119,6 +123,7 @@ fun MainScreenContent(
     onReset: () -> Unit,
     onCheckNews: () -> Unit,
     newsList: List<NewsItem>,
+    onNewsClick: (NewsItem) -> Unit,
     isLoadingNews: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -222,7 +227,8 @@ fun MainScreenContent(
                                     cardNewsItem(
                                         image = it,
                                         title = news.title,
-                                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 10.dp)
+                                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 10.dp),
+                                        onClick = { onNewsClick(news) },
                                     )
                                 }
                             }
@@ -357,9 +363,9 @@ fun HeaderSection(
                         fontFamily = poppinsFontFamily,
                         fontSize = 16.sp,
                         color = when {
-                            isSafe -> Color.Green
-                            isNotSafe -> Color.Red
-                            else -> Color.White
+                            isSafe -> green
+                            isNotSafe -> red
+                            else -> white
                         },
                     )
                     Text(

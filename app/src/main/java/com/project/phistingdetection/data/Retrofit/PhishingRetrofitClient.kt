@@ -1,5 +1,6 @@
 package com.project.phistingdetection.data.Retrofit
 
+import android.util.Log
 import com.project.phistingdetection.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -28,6 +29,7 @@ object PhishingRetrofitClient {
         .build()
 
     val instance: PhishingApi by lazy {
+        Log.d("API", "Base URL: ${BuildConfig.BASE_URL}")
         retrofit.create(PhishingApi::class.java)
     }
 }
