@@ -100,15 +100,11 @@ fun MainScreen(
         onReset = {
             inputLinkUrl = ""
             viewModelUrl.reset()
-        },
-        onCheckNews = { viewModelNews.fetchNews() },
-        newsList = viewModelNews.newsList,
-        onNewsClick = onNewsClick,
-        isLoadingNews = viewModelNews.isLoading,
+        }
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+//@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MainScreenContent(
     inputLinkUrl: String,
@@ -121,15 +117,10 @@ fun MainScreenContent(
     isSafe: Boolean,
     isNotSafe: Boolean,
     onReset: () -> Unit,
-    onCheckNews: () -> Unit,
-    newsList: List<NewsItem>,
-    onNewsClick: (NewsItem) -> Unit,
-    isLoadingNews: Boolean,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val refreshing = remember { mutableStateOf(false) }
-    var selectedTabIndex by remember { mutableStateOf(0) }
 
     Box(
         modifier = modifier
@@ -144,13 +135,13 @@ fun MainScreenContent(
                 refreshing.value = true
                 CoroutineScope(Dispatchers.Main).launch {
                     delay(500)
-                    onCheckNews()
                     onReset()
                     refreshing.value = false
                 }
             }
         ) {
             LazyColumn(
+                verticalArrangement = Arrangement.Center,
                 modifier = modifier
                     .fillMaxSize()
             ) {
@@ -173,78 +164,13 @@ fun MainScreenContent(
 
                     Spacer(modifier = Modifier.height(10.dp))
                 }
-
-                stickyHeader {
-                    TabSelection(
-                        selectedTabIndex = selectedTabIndex,
-                        onTabSelected = { selectedTabIndex = it }
-                    )
-                }
-
-                when (selectedTabIndex) {
-                    0 -> {
-                        if (isLoadingNews) {
-                            item {
-                                Column(
-                                    verticalArrangement = Arrangement.Center,
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    modifier = Modifier
-                                        .fillParentMaxWidth()
-                                        .padding(top = 100.dp)
-                                ) {
-                                    CircularProgressIndicator(
-                                        color = turquoiseGreen,
-                                        strokeWidth = 3.dp,
-                                        modifier = Modifier.size(30.dp)
-                                    )
-                                }
-                            }
-                        } else if (newsList.isEmpty()) {
-                            item {
-                                Column(
-                                    verticalArrangement = Arrangement.Center,
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .fillMaxWidth()
-                                        .padding(100.dp),
-                                ) {
-                                    Text(
-                                        text = "Berita tidak ditemukan",
-                                        fontSize = 14.sp,
-                                        fontWeight = FontWeight.SemiBold,
-                                        fontFamily = poppinsFontFamily,
-                                        color = darkGray
-                                    )
-                                }
-
-                            }
-
-                        }
-                        else {
-                            items(newsList) { news ->
-                                news.image_url?.let {
-                                    cardNewsItem(
-                                        image = it,
-                                        title = news.title,
-                                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 10.dp),
-                                        onClick = { onNewsClick(news) },
-                                    )
-                                }
-                            }
-                        }
-                    }
-
-                    1 -> items(getDummyTips()) { tips ->
-                        cardTipsItem(
-                            iconImage = painterResource(tips.iconRes),
-                            title = tips.title,
-                            description = tips.description,
-                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 10.dp)
-
-                        )
-                    }
-                }
+//
+//                stickyHeader {
+//                    TabSelection(
+//                        selectedTabIndex = selectedTabIndex,
+//                        onTabSelected = { selectedTabIndex = it }
+//                    )
+//                }
             }
         }
     }
@@ -266,12 +192,15 @@ fun HeaderSection(
 ) {
     Surface(
         modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(bottomEnd = 30.dp, bottomStart = 30.dp)),
+            .fillMaxSize()
+            .padding(16.dp)
+            .height(250.dp)
+            .clip(RoundedCornerShape(30.dp)),
         color = blue,
         shadowElevation = 4.dp,
     ) {
         Column(
+            verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
@@ -281,7 +210,6 @@ fun HeaderSection(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 20.dp)
             ) {
                 Text(
                     text = "Periksa Tautan Website",
@@ -410,62 +338,55 @@ fun HeaderSection(
     }
 }
 
-@Composable
-fun TabSelection(
-    selectedTabIndex: Int,
-    onTabSelected: (Int) -> Unit
-) {
-
-    val tabTitles = listOf("Berita", "Tips & Trick")
-
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Divider(
-            color = gray,
-            thickness = 1.dp,
-            modifier = Modifier
-        )
-        TabRow(
-            selectedTabIndex = selectedTabIndex,
-            modifier = Modifier.fillMaxWidth(),
-            containerColor = background,
-            indicator = { tabPositions ->
-                TabRowDefaults.Indicator(
-                    modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
-                    height = 2.dp,
-                    color = turquoiseGreen
-                )
-            },
-            divider = {}
-        ) {
-            tabTitles.forEachIndexed { index, title ->
-                Tab(
-                    selected = selectedTabIndex == index,
-                    onClick = { onTabSelected(index) },
-                    text = {
-                        Text(
-                            text = title,
-                            fontFamily = poppinsFontFamily,
-                            fontSize =  12.sp,
-                            color = if (selectedTabIndex == index) turquoiseGreen else darkGray,
-                            fontWeight = if (selectedTabIndex == index) FontWeight.Bold else FontWeight.SemiBold
-                        )
-                    }
-                )
-            }
-        }
-        Divider(
-            color = gray,
-            thickness = 1.dp,
-            modifier = Modifier
-        )
-    }
-}
-
-
-//@Preview(showSystemUi = true)
 //@Composable
-//private fun MainScreenContentPreview() {
-//    MainScreen()
+//fun TabSelection(
+//    selectedTabIndex: Int,
+//    onTabSelected: (Int) -> Unit
+//) {
+//
+//    val tabTitles = listOf("Berita", "Tips & Trick")
+//
+//    Column(
+//        modifier = Modifier.fillMaxWidth()
+//    ) {
+//        Divider(
+//            color = gray,
+//            thickness = 1.dp,
+//            modifier = Modifier
+//        )
+//        TabRow(
+//            selectedTabIndex = selectedTabIndex,
+//            modifier = Modifier.fillMaxWidth(),
+//            containerColor = background,
+//            indicator = { tabPositions ->
+//                TabRowDefaults.Indicator(
+//                    modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
+//                    height = 2.dp,
+//                    color = turquoiseGreen
+//                )
+//            },
+//            divider = {}
+//        ) {
+//            tabTitles.forEachIndexed { index, title ->
+//                Tab(
+//                    selected = selectedTabIndex == index,
+//                    onClick = { onTabSelected(index) },
+//                    text = {
+//                        Text(
+//                            text = title,
+//                            fontFamily = poppinsFontFamily,
+//                            fontSize =  12.sp,
+//                            color = if (selectedTabIndex == index) turquoiseGreen else darkGray,
+//                            fontWeight = if (selectedTabIndex == index) FontWeight.Bold else FontWeight.SemiBold
+//                        )
+//                    }
+//                )
+//            }
+//        }
+//        Divider(
+//            color = gray,
+//            thickness = 1.dp,
+//            modifier = Modifier
+//        )
+//    }
 //}
