@@ -18,7 +18,11 @@ if (envFile.exists()) {
 val autoEnvKeys = listOf(
     "BASE_URL",
     "API_KEY",
-    "NEWS_API_KEY"
+    "NEWS_API_KEY",
+    "KEYSTORE_PATH",
+    "KEYSTORE_PASSWORD",
+    "KEY_ALIAS",
+    "KEY_PASSWORD"
 )
 
 android {
@@ -40,15 +44,26 @@ android {
         }
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file(envProps["KEYSTORE_PATH"] as String)
+            storePassword = envProps["KEYSTORE_PASSWORD"] as String
+            keyAlias = envProps["KEY_ALIAS"] as String
+            keyPassword = envProps["KEY_PASSWORD"] as String
+        }
+    }
+
     buildTypes {
-        release {
+        getByName("release") {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11

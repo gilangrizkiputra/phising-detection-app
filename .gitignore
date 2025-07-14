@@ -20,3 +20,6 @@
 
 # Optional: ignore gradle.properties if contains secret key
 .env
+
+# Keystore
+my-release-key.jks
