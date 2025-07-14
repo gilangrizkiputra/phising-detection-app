@@ -67,7 +67,14 @@ class PhishingViewModel : ViewModel() {
                     (response.probability.phishing * 100).roundToInt()
                 }
 
-                urlStatus = "Link $safePercentage% ${response.status.uppercase()} digunakan"
+                if (response.prediction == -1) {
+                    urlStatus = "Link $safePercentage% terdeteksi sebagai PHISHING, TIDAK BOLEH DIAKSES!"
+                    isSafe = false
+                    isNotSafe = true
+                    return@launch
+                }
+
+                urlStatus = "Link $safePercentage% ${response.status.uppercase()} untuk diakses"
 
             } catch (e: Exception) {
                 urlStatus = "Error: ${e.message}"
