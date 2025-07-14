@@ -194,7 +194,6 @@ fun HeaderSection(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
-            .height(250.dp)
             .clip(RoundedCornerShape(30.dp)),
         color = blue,
         shadowElevation = 4.dp,
@@ -203,7 +202,7 @@ fun HeaderSection(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(start = 16.dp, end = 16.dp, top = 50.dp, bottom = 50.dp)
                 .animateContentSize()
         ) {
             Row(
